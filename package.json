@@ -1,0 +1,24 @@
+{
+  "name": "chitter-typescript-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/index.js",
+  "scripts": {
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PhilipVigus/chitter-typescript-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PhilipVigus/chitter-typescript-backend/issues"
+  },
+  "homepage": "https://github.com/PhilipVigus/chitter-typescript-backend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
