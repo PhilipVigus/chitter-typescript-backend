@@ -6,7 +6,7 @@ describe("Endpoints", () => {
     const expectedData = {
       peeps: [
         { text: "First peep", timeCreated: 1594030856065 },
-        { text: "Second peep", timeCreated: 1594030856065 }
+        { text: "Second peep", timeCreated: 1494030856065 }
       ]
     };
 
