@@ -4,7 +4,8 @@
   "description": "",
   "main": "./src/index.js",
   "scripts": {
-    "start": "node .",
+    "build": "tsc",
+    "start": "tsc && node .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +23,8 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
+    "@types/express": "^4.17.7",
+    "@types/node": "^14.0.19",
     "typescript": "^3.9.6"
   }
 }
