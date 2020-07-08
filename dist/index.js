@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const app = express_1.default();
 const port = 5000;
 app.get("/", (req, res) => {
-    res.send("Hello world!");
+    res.json({ test: 5 }).send();
 });
 app.listen(port, () => {
     console.log(`server started at http://localhost:${port}`);

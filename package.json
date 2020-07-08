@@ -2,11 +2,15 @@
   "name": "chitter-typescript-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "tsc && node .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm-run-all clean tsc",
+    "clean": "rimraf dist/*",
+    "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
+    "dev:start": "npm-run-all build start",
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",
@@ -25,6 +29,9 @@
   "devDependencies": {
     "@types/express": "^4.17.7",
     "@types/node": "^14.0.19",
+    "nodemon": "^2.0.4",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
     "typescript": "^3.9.6"
   }
 }
