@@ -19,4 +19,9 @@ app.get("/peeps", (req, res) => {
   });
 });
 
+app.post("/peeps", (req, res) => {
+  res.status(200);
+  res.end();
+});
+
 export default app;
