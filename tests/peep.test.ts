@@ -1,4 +1,5 @@
 import Peep from "../src/model/Peep";
+import PGConnection from "../src/model/PGConnection";
 
 describe("Peep", () => {
   describe("all", () => {
@@ -11,11 +12,25 @@ describe("Peep", () => {
   });
 
   describe("create", () => {
-    it("returns the created peep", () => {
-      const peep = Peep.create("Peep text", 1594030856065);
+    it("returns the created peep", async () => {
+      const peep = await Peep.create("Peep text");
 
       expect(peep.text).toEqual("Peep text");
-      expect(peep.timeCreated).toEqual(1594030856065);
+
+      PGConnection.open();
+      await PGConnection.query("TRUNCATE Peeps;");
+      PGConnection.close();
+    });
+
+    it("stores the peep in the database", async () => {
+      const peep = await Peep.create("Peep text");
+
+      PGConnection.open();
+      const result = await PGConnection.query("SELECT * FROM Peeps;");
+      await PGConnection.query("TRUNCATE Peeps;");
+      PGConnection.close();
+
+      expect(result.rowCount).toEqual(1);
     });
   });
 });

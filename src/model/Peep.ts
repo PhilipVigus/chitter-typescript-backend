@@ -1,9 +1,14 @@
+import PGConnection from "./PGConnection";
+
 class Peep {
+  private _id: number;
+
   private _text: string;
 
-  private _timeCreated: number;
+  private _timeCreated: Date;
 
-  private constructor(text: string, timeCreated: number) {
+  private constructor(id: number, text: string, timeCreated: Date) {
+    this._id = id;
     this._text = text;
     this._timeCreated = timeCreated;
   }
@@ -20,15 +25,26 @@ class Peep {
     return this.peeps;
   }
 
-  public static create(text: string, timeCreated: number): Peep {
-    return new Peep(text, timeCreated);
+  public static async create(text: string): Promise<Peep> {
+    PGConnection.open();
+    const result = await PGConnection.query(
+      `INSERT INTO Peeps (text) VALUES ($$${text}$$) RETURNING id, text, created_at;`
+    );
+    PGConnection.close();
+    const newPeepAttributes = result.rows[0];
+
+    return new Peep(
+      newPeepAttributes.id,
+      newPeepAttributes.text,
+      newPeepAttributes.created_at
+    );
   }
 
   get text(): string {
     return this._text;
   }
 
-  get timeCreated(): number {
+  get timeCreated(): Date {
     return this._timeCreated;
   }
 }
