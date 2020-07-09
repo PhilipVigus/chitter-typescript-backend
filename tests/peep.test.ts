@@ -9,4 +9,13 @@ describe("Peep", () => {
       ]);
     });
   });
+
+  describe("create", () => {
+    it("returns the created peep", () => {
+      const peep = Peep.create("Peep text", 1594030856065);
+
+      expect(peep.text).toEqual("Peep text");
+      expect(peep.timeCreated).toEqual(1594030856065);
+    });
+  });
 });
