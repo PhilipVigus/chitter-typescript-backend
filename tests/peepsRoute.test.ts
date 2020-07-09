@@ -3,10 +3,6 @@ import app from "../src/server";
 import PGConnection from "../src/model/PGConnection";
 
 describe("/peeps endpoint", () => {
-  beforeAll(async () => {
-    await PGConnection.open();
-  });
-
   afterEach(async () => {
     await PGConnection.query("TRUNCATE Peeps;");
   });
