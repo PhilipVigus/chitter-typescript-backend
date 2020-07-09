@@ -15,11 +15,13 @@ describe("Peep", () => {
   });
 
   describe("all", () => {
-    it("gets all peeps from the database", () => {
-      expect(Peep.all()).toEqual([
-        { text: "First peep", timeCreated: 1594030856065 },
-        { text: "Second peep", timeCreated: 1494030856065 }
-      ]);
+    it("gets all peeps from the database", async () => {
+      await Peep.create("First peep");
+      await Peep.create("Second peep");
+      const AllPeeps = await Peep.all();
+      expect(AllPeeps.peeps.length).toEqual(2);
+      expect(AllPeeps.peeps[0].text).toEqual("First peep");
+      expect(AllPeeps.peeps[1].text).toEqual("Second peep");
     });
   });
 
