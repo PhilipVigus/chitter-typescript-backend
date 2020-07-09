@@ -1,4 +1,5 @@
 import express from "express";
+import Peep from "../model/Peep";
 
 const router = express.Router();
 router.get("/", (req, res) => {
@@ -10,7 +11,8 @@ router.get("/", (req, res) => {
   });
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
+  await Peep.create(req.body.text);
   res.status(200);
   res.end();
 });

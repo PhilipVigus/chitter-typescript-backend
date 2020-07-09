@@ -1,7 +1,20 @@
 import request from "supertest";
 import app from "../src/server";
+import PGConnection from "../src/model/PGConnection";
 
 describe("/peeps endpoint", () => {
+  beforeAll(async () => {
+    await PGConnection.open();
+  });
+
+  afterEach(async () => {
+    await PGConnection.query("TRUNCATE Peeps;");
+  });
+
+  afterAll(async () => {
+    await PGConnection.close();
+  });
+
   describe("GET", () => {
     it("returns status 200", async () => {
       const res = await request(app).get("/peeps");
@@ -23,10 +36,16 @@ describe("/peeps endpoint", () => {
 
   describe("POST", () => {
     it("returns status 200", async () => {
-      const res = await request(app)
-        .post("/peeps")
-        .send({ text: "New peep", timeCreated: 1594030856065 });
-      expect(await res.status).toBe(200);
+      const res = await request(app).post("/peeps").send({ text: "New peep" });
+      expect(res.status).toBe(200);
+    });
+
+    it("stores the peep in the database", async () => {
+      const res = await request(app).post("/peeps").send({ text: "New peep" });
+      const result = await PGConnection.query("SELECT * FROM Peeps;");
+
+      expect(result.rowCount).toEqual(1);
+      expect(result.rows[0].text).toEqual("New peep");
     });
   });
 });

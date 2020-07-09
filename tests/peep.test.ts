@@ -2,6 +2,18 @@ import Peep from "../src/model/Peep";
 import PGConnection from "../src/model/PGConnection";
 
 describe("Peep", () => {
+  beforeAll(async () => {
+    await PGConnection.open();
+  });
+
+  afterEach(async () => {
+    await PGConnection.query("TRUNCATE Peeps;");
+  });
+
+  afterAll(async () => {
+    await PGConnection.close();
+  });
+
   describe("all", () => {
     it("gets all peeps from the database", () => {
       expect(Peep.all()).toEqual([
@@ -16,19 +28,11 @@ describe("Peep", () => {
       const peep = await Peep.create("Peep text");
 
       expect(peep.text).toEqual("Peep text");
-
-      PGConnection.open();
-      await PGConnection.query("TRUNCATE Peeps;");
-      PGConnection.close();
     });
 
     it("stores the peep in the database", async () => {
       const peep = await Peep.create("Peep text");
-
-      PGConnection.open();
       const result = await PGConnection.query("SELECT * FROM Peeps;");
-      await PGConnection.query("TRUNCATE Peeps;");
-      PGConnection.close();
 
       expect(result.rowCount).toEqual(1);
     });

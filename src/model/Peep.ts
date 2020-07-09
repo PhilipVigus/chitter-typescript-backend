@@ -26,11 +26,9 @@ class Peep {
   }
 
   public static async create(text: string): Promise<Peep> {
-    PGConnection.open();
     const result = await PGConnection.query(
       `INSERT INTO Peeps (text) VALUES ($$${text}$$) RETURNING id, text, created_at;`
     );
-    PGConnection.close();
     const newPeepAttributes = result.rows[0];
 
     return new Peep(
