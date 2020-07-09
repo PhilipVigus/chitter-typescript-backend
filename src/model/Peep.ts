@@ -13,16 +13,12 @@ class Peep {
     this._timeCreated = timeCreated;
   }
 
-  private static peeps = [
-    { text: "First peep", timeCreated: 1594030856065 },
-    { text: "Second peep", timeCreated: 1494030856065 }
-  ];
-
-  public static all(): {
-    text: string;
-    timeCreated: number;
-  }[] {
-    return this.peeps;
+  public static async all(): Promise<{ peeps: Peep[] }> {
+    const result = await PGConnection.query("SELECT * FROM Peeps;");
+    const peeps = result.rows.map((row) => {
+      return new Peep(row.id, row.text, row.created_at);
+    });
+    return { peeps };
   }
 
   public static async create(text: string): Promise<Peep> {

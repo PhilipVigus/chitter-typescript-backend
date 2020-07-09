@@ -2,13 +2,8 @@ import express from "express";
 import Peep from "../model/Peep";
 
 const router = express.Router();
-router.get("/", (req, res) => {
-  res.json({
-    peeps: [
-      { text: "First peep", timeCreated: 1594030856065 },
-      { text: "Second peep", timeCreated: 1494030856065 }
-    ]
-  });
+router.get("/", async (req, res) => {
+  res.json(await Peep.all());
 });
 
 router.post("/", async (req, res) => {
