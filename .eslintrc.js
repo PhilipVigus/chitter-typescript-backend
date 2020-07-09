@@ -2,7 +2,7 @@ module.exports = {
   root: true,
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: "./tsconfig.json",
+    project: "./tsconfig.json"
   },
   plugins: ["@typescript-eslint", "jest"],
   extends: [
@@ -11,11 +11,14 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "prettier/@typescript-eslint",
     "plugin:prettier/recommended",
-    "plugin:jest/recommended",
+    "plugin:jest/recommended"
   ],
   settings: {
     react: {
-      version: "detect",
-    },
+      version: "detect"
+    }
   },
+  rules: {
+    "no-underscore-dangle": ["error", { allowAfterThis: true }]
+  }
 };
