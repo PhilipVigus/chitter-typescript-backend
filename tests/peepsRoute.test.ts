@@ -1,6 +1,7 @@
 import request from "supertest";
 import app from "../src/server";
 import PGConnection from "../src/model/PGConnection";
+import Peep from "../src/model/Peep";
 
 describe("/peeps endpoint", () => {
   afterEach(async () => {
@@ -18,15 +19,10 @@ describe("/peeps endpoint", () => {
     });
 
     it("gets the peeps", async () => {
-      const expectedData = {
-        peeps: [
-          { text: "First peep", timeCreated: 1594030856065 },
-          { text: "Second peep", timeCreated: 1494030856065 }
-        ]
-      };
-
+      await Peep.create("First peep");
+      await Peep.create("Second peep");
       const res = await request(app).get("/peeps");
-      expect(res.body).toEqual(expectedData);
+      expect(res.body.peeps.length).toEqual(2);
     });
   });
 
