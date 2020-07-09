@@ -1,4 +1,4 @@
-import PGConnection from "../src/PGConnection";
+import PGConnection from "../src/model/PGConnection";
 
 describe("PGConnection", () => {
   describe("query", () => {

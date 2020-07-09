@@ -23,7 +23,7 @@ class PGConnection {
     });
   }
 
-  public static async query(queryString: string): Promise<QueryResult<never>> {
+  public static async query(queryString: string): Promise<QueryResult> {
     return PGConnection.pool.query(queryString);
   }
 

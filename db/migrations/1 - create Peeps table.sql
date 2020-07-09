@@ -1,0 +1,1 @@
+CREATE TABLE Peeps (id serial PRIMARY KEY, text VARCHAR (280) NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT now());
