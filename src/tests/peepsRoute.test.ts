@@ -1,7 +1,7 @@
 import request from "supertest";
-import app from "../src/server";
-import PGConnection from "../src/model/PGConnection";
-import Peep from "../src/model/Peep";
+import app from "../server";
+import PGConnection from "../model/PGConnection";
+import Peep from "../model/Peep";
 
 describe("/peeps endpoint", () => {
   afterEach(async () => {
@@ -33,7 +33,7 @@ describe("/peeps endpoint", () => {
     });
 
     it("stores the peep in the database", async () => {
-      const res = await request(app).post("/peeps").send({ text: "New peep" });
+      await request(app).post("/peeps").send({ text: "New peep" });
       const result = await PGConnection.query("SELECT * FROM Peeps;");
 
       expect(result.rowCount).toEqual(1);

@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../src/server";
+import app from "../server";
 
 describe("Endpoints", () => {
   it("gets the test endpoint", async () => {
