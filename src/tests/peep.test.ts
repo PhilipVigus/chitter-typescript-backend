@@ -1,5 +1,5 @@
-import Peep from "../src/model/Peep";
-import PGConnection from "../src/model/PGConnection";
+import Peep from "../model/Peep";
+import PGConnection from "../model/PGConnection";
 
 describe("Peep", () => {
   beforeAll(async () => {
@@ -33,7 +33,7 @@ describe("Peep", () => {
     });
 
     it("stores the peep in the database", async () => {
-      const peep = await Peep.create("Peep text");
+      await Peep.create("Peep text");
       const result = await PGConnection.query("SELECT * FROM Peeps;");
 
       expect(result.rowCount).toEqual(1);
