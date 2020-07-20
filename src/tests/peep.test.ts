@@ -19,6 +19,7 @@ describe("Peep", () => {
       await Peep.create("First peep");
       await Peep.create("Second peep");
       const AllPeeps = await Peep.all();
+
       expect(AllPeeps.peeps.length).toEqual(2);
       expect(AllPeeps.peeps[0].text).toEqual("First peep");
       expect(AllPeeps.peeps[1].text).toEqual("Second peep");
