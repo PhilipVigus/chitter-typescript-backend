@@ -25,5 +25,29 @@ describe("/users endpoint", () => {
         .send({ username: "bob", password: "12345678" });
       expect(res.body.username).toEqual("bob");
     });
+
+    it("returns  422 if the username is taken", async () => {
+      await request(app)
+        .post("/users")
+        .send({ username: "bob", password: "12345678" });
+
+      const res = await request(app)
+        .post("/users")
+        .send({ username: "bob", password: "09876543" });
+
+      expect(res.status).toBe(422);
+    });
+
+    it("returns an error if the username is taken", async () => {
+      await request(app)
+        .post("/users")
+        .send({ username: "bob", password: "12345678" });
+
+      const res = await request(app)
+        .post("/users")
+        .send({ username: "bob", password: "09876543" });
+
+      expect(res.body).toEqual({ error: "Username already taken" });
+    });
   });
 });
