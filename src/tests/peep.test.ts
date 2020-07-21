@@ -2,15 +2,12 @@ import Peep from "../model/Peep";
 import PGConnection from "../model/PGConnection";
 
 describe("Peep", () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     await PGConnection.open();
   });
 
   afterEach(async () => {
     await PGConnection.query("TRUNCATE Peeps;");
-  });
-
-  afterAll(async () => {
     await PGConnection.close();
   });
 
