@@ -9,7 +9,7 @@
     "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
     "dev:start": "npm-run-all build start",
     "start": "node .",
-    "test": "jest --clearCache && jest",
+    "test": "jest --clearCache && jest -i",
     "tsc": "tsc",
     "lint": "eslint ./src/**/* --ext .ts"
   },
