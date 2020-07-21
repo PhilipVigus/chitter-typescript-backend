@@ -2,7 +2,9 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import PGConnection from "./model/PGConnection";
-import peepsRoute from "./routes/peeps";
+import peepsRoute from "./routes/peepsRoute";
+import usersRoute from "./routes/usersRoute";
+import sessionsRoute from "./routes/sessionsRoute";
 
 PGConnection.open();
 const app = express();
@@ -15,5 +17,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/peeps", peepsRoute);
+app.use("/users", usersRoute);
+app.use("/sessions", sessionsRoute);
 
 export default app;
