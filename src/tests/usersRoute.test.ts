@@ -16,6 +16,7 @@ describe("/users endpoint", () => {
       const res = await request(app)
         .post("/users")
         .send({ username: "bob", password: "12345678" });
+
       expect(res.status).toBe(200);
     });
 
@@ -23,7 +24,10 @@ describe("/users endpoint", () => {
       const res = await request(app)
         .post("/users")
         .send({ username: "bob", password: "12345678" });
-      expect(res.body.username).toEqual("bob");
+      const dbResult = await PGConnection.query("SELECT * FROM Users;");
+
+      expect(res.body.username).toEqual(dbResult.rows[0].username);
+      expect(res.body.id).toEqual(dbResult.rows[0].id);
     });
 
     it("returns  422 if the username is taken", async () => {
