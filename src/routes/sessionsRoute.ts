@@ -9,7 +9,7 @@ router.post("/", async (req: Request, res: Response) => {
   );
 
   if (userData.rowCount === 0) {
-    res.status(200).send({ error: "error" });
+    res.status(422).send({ error: "error" });
   } else {
     res.status(200).send({ id: 1, username: "bob" });
   }

@@ -41,6 +41,7 @@ describe("/sessions endpoint", () => {
         .send({ username: "bob", password: "12345678" });
 
       expect(res.body).toEqual({ error: "error" });
+      expect(res.status).toEqual(422);
     });
   });
 });

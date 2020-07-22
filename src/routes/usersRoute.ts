@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post("/", async (req: Request, res: Response) => {
   const user = await User.create(req.body.username, req.body.password);
+
   if (user) {
     res.status(200).send({ id: user?.id, username: user?.username });
   } else {
