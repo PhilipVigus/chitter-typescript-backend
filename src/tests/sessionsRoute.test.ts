@@ -1,21 +1,25 @@
 import request from "supertest";
-import app from "../server";
+import App from "../App";
 import User from "../model/User";
 import PGConnection from "../model/PGConnection";
 
 describe("/sessions endpoint", () => {
-  afterEach(async () => {
-    await PGConnection.query("TRUNCATE Users;");
+  let app: App;
+
+  beforeEach(() => {
+    app = new App();
+    app.start();
   });
 
-  afterAll(async () => {
-    await PGConnection.close();
+  afterEach(async () => {
+    await PGConnection.query("TRUNCATE Users;");
+    await app.stop();
   });
 
   describe("POST", () => {
     it("returns status 200", async () => {
-      User.create("bob", "12345678");
-      const res = await request(app)
+      await User.create("bob", "12345678");
+      const res = await request(app.server)
         .post("/sessions")
         .send({ username: "bob", password: "12345678" });
 
@@ -23,8 +27,8 @@ describe("/sessions endpoint", () => {
     });
 
     it("returns the username and id", async () => {
-      User.create("bob", "12345678");
-      const res = await request(app)
+      await User.create("bob", "12345678");
+      const res = await request(app.server)
         .post("/sessions")
         .send({ username: "bob", password: "12345678" });
 
@@ -32,7 +36,7 @@ describe("/sessions endpoint", () => {
     });
 
     it("returns an error if the login fails", async () => {
-      const res = await request(app)
+      const res = await request(app.server)
         .post("/sessions")
         .send({ username: "bob", password: "12345678" });
 

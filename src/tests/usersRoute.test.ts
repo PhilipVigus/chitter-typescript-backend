@@ -1,19 +1,23 @@
 import request from "supertest";
-import app from "../server";
+import App from "../App";
 import PGConnection from "../model/PGConnection";
 
 describe("/users endpoint", () => {
-  afterEach(async () => {
-    await PGConnection.query("TRUNCATE Users;");
+  let app: App;
+
+  beforeEach(() => {
+    app = new App();
+    app.start();
   });
 
-  afterAll(async () => {
-    await PGConnection.close();
+  afterEach(async () => {
+    await PGConnection.query("TRUNCATE Users;");
+    await app.stop();
   });
 
   describe("POST", () => {
     it("returns status 200", async () => {
-      const res = await request(app)
+      const res = await request(app.server)
         .post("/users")
         .send({ username: "bob", password: "12345678" });
 
@@ -21,7 +25,7 @@ describe("/users endpoint", () => {
     });
 
     it("returns the user id and name", async () => {
-      const res = await request(app)
+      const res = await request(app.server)
         .post("/users")
         .send({ username: "bob", password: "12345678" });
       const dbResult = await PGConnection.query("SELECT * FROM Users;");
@@ -31,11 +35,11 @@ describe("/users endpoint", () => {
     });
 
     it("returns  422 if the username is taken", async () => {
-      await request(app)
+      await request(app.server)
         .post("/users")
         .send({ username: "bob", password: "12345678" });
 
-      const res = await request(app)
+      const res = await request(app.server)
         .post("/users")
         .send({ username: "bob", password: "09876543" });
 
@@ -43,11 +47,11 @@ describe("/users endpoint", () => {
     });
 
     it("returns an error if the username is taken", async () => {
-      await request(app)
+      await request(app.server)
         .post("/users")
         .send({ username: "bob", password: "12345678" });
 
-      const res = await request(app)
+      const res = await request(app.server)
         .post("/users")
         .send({ username: "bob", password: "09876543" });
 
