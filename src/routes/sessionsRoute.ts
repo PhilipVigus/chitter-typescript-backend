@@ -4,6 +4,7 @@ import PGConnection from "../model/PGConnection";
 const router = express.Router();
 
 router.post("/", async (req: Request, res: Response) => {
+  console.log("received new session");
   const userData = await PGConnection.query(
     `SELECT * FROM Users WHERE username='${req.body.username}';`
   );
@@ -11,7 +12,9 @@ router.post("/", async (req: Request, res: Response) => {
   if (userData.rowCount === 0) {
     res.status(422).send({ error: "error" });
   } else {
-    res.status(200).send({ id: 1, username: "bob" });
+    res
+      .status(200)
+      .send({ id: userData.rows[0].id, username: userData.rows[0].username });
   }
 });
 
