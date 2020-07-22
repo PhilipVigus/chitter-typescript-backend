@@ -2,48 +2,56 @@ import express, { Application } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
+import http, { Server } from "http";
+import { createTerminus } from "@godaddy/terminus";
 import PGConnection from "./model/PGConnection";
 import peepsRoute from "./routes/peepsRoute";
 import usersRoute from "./routes/usersRoute";
 import sessionsRoute from "./routes/sessionsRoute";
-import { Server } from "http";
 
 dotenv.config();
 
 const port = process.env.SERVER_PORT;
 
 class App {
-  private _server: Application;
+  private _app: Application;
 
-  private _test: Server | null;
+  private _server: Server | null;
 
   public constructor() {
-    this._test = null;
-    this._server = express();
-    this._server.use(helmet());
-    this._server.use(cors());
-    this._server.use(express.json());
+    this._app = express();
+    this._app.use(helmet());
+    this._app.use(cors());
+    this._app.use(express.json());
 
-    this._server.use("/peeps", peepsRoute);
-    this._server.use("/users", usersRoute);
-    this._server.use("/sessions", sessionsRoute);
+    this._app.use("/peeps", peepsRoute);
+    this._app.use("/users", usersRoute);
+    this._app.use("/sessions", sessionsRoute);
+    this._server = http.createServer(this._app);
+
+    createTerminus(this._server, {
+      signals: ["SIGINT", "SIGTERM"],
+      onSignal: this.onSignal
+    });
 
     PGConnection.open();
   }
 
   public start(): void {
-    this._test = this._server.listen(port, () => {
-      console.log(`server started at http://localhost:${port}`);
-    });
+    this._server?.listen(port);
   }
 
   public async stop(): Promise<void> {
-    this._test?.close();
+    this._server?.close();
     await PGConnection.close();
   }
 
+  private async onSignal(): Promise<void> {
+    this.stop();
+  }
+
   get server(): Application {
-    return this._server;
+    return this._app;
   }
 }
 
