@@ -18,7 +18,7 @@ describe("/sessions endpoint", () => {
 
   describe("POST", () => {
     it("returns status 200", async () => {
-      User.create("bob", "12345678");
+      await User.create("bob", "12345678");
       const res = await request(app.server)
         .post("/sessions")
         .send({ username: "bob", password: "12345678" });
@@ -27,7 +27,7 @@ describe("/sessions endpoint", () => {
     });
 
     it("returns the username and id", async () => {
-      User.create("bob", "12345678");
+      await User.create("bob", "12345678");
       const res = await request(app.server)
         .post("/sessions")
         .send({ username: "bob", password: "12345678" });
