@@ -28,11 +28,16 @@ describe("/sessions endpoint", () => {
 
     it("returns the username and id", async () => {
       await User.create("bob", "12345678");
+      const dbData = await PGConnection.query("SELECT * FROM users;");
+
       const res = await request(app.server)
         .post("/sessions")
         .send({ username: "bob", password: "12345678" });
 
-      expect(res.body).toEqual({ id: 1, username: "bob" });
+      expect(res.body).toEqual({
+        id: dbData.rows[0].id,
+        username: dbData.rows[0].username
+      });
     });
 
     it("returns an error if the login fails", async () => {
@@ -40,7 +45,7 @@ describe("/sessions endpoint", () => {
         .post("/sessions")
         .send({ username: "bob", password: "12345678" });
 
-      expect(res.body).toEqual({ error: "error" });
+      expect(res.body).toEqual({ error: "Username not found" });
       expect(res.status).toEqual(422);
     });
   });
