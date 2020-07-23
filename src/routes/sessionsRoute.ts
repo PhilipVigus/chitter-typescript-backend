@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import * as bcrypt from "bcryptjs";
 import PGConnection from "../model/PGConnection";
 
 const router = express.Router();
@@ -10,7 +11,7 @@ router.post("/", async (req: Request, res: Response) => {
 
   if (
     userData.rowCount === 0 ||
-    userData.rows[0].password !== req.body.password
+    !(await bcrypt.compare(req.body.password, userData.rows[0].password))
   ) {
     res.status(422).send({ error: "Incorrect login details" });
   } else {

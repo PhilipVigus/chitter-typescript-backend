@@ -1,3 +1,4 @@
+import * as bcrypt from "bcryptjs";
 import PGConnection from "./PGConnection";
 
 class User {
@@ -18,8 +19,9 @@ class User {
       return null;
     }
 
+    const hashedPassword = await bcrypt.hash(password, 12);
     const result = await PGConnection.query(
-      `INSERT INTO Users (username, password) VALUES ($$${username}$$, $$${password}$$) RETURNING id, username;`
+      `INSERT INTO Users (username, password) VALUES ($$${username}$$, $$${hashedPassword}$$) RETURNING id, username;`
     );
     const newUserAttributes = result.rows[0];
 
