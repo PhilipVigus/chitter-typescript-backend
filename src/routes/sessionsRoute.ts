@@ -8,8 +8,11 @@ router.post("/", async (req: Request, res: Response) => {
     `SELECT * FROM Users WHERE username='${req.body.username}';`
   );
 
-  if (userData.rowCount === 0) {
-    res.status(422).send({ error: "Username not found" });
+  if (
+    userData.rowCount === 0 ||
+    userData.rows[0].password !== req.body.password
+  ) {
+    res.status(422).send({ error: "Incorrect login details" });
   } else {
     res
       .status(200)

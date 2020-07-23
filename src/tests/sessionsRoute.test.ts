@@ -40,12 +40,23 @@ describe("/sessions endpoint", () => {
       });
     });
 
-    it("returns an error if the login fails", async () => {
+    it("returns an error if the username is not found", async () => {
       const res = await request(app.server)
         .post("/sessions")
         .send({ username: "bob", password: "12345678" });
 
-      expect(res.body).toEqual({ error: "Username not found" });
+      expect(res.body).toEqual({ error: "Incorrect login details" });
+      expect(res.status).toEqual(422);
+    });
+
+    it("returns an error if the passoword is incorrect", async () => {
+      await User.create("bob", "12345678");
+
+      const res = await request(app.server)
+        .post("/sessions")
+        .send({ username: "bob", password: "1234567" });
+
+      expect(res.body).toEqual({ error: "Incorrect login details" });
       expect(res.status).toEqual(422);
     });
   });
