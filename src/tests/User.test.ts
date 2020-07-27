@@ -39,5 +39,9 @@ describe("Peep", () => {
         "Bob"
       );
     });
+
+    it("returns null if the user is not found", async () => {
+      expect(await User.findById(1)).toEqual(null);
+    });
   });
 });
