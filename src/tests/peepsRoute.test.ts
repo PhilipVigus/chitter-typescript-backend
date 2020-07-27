@@ -48,6 +48,14 @@ describe("/peeps endpoint", () => {
       expect(res.body.username).toEqual("bob");
       expect(res.body.text).toEqual("First peep");
     });
+
+    it("returns an error if the peep isn't found", async () => {
+      const user = await User.create("bob", "12345678");
+      const peep = await Peep.create(user?.id as number, "First peep");
+      const res = await request(app.server).get(`/peeps/${peep.id + 1}`);
+      expect(res.status).toEqual(422);
+      expect(res.body.error).toEqual("Peep not found");
+    });
   });
 
   describe("POST", () => {
