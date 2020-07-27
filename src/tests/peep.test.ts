@@ -22,8 +22,10 @@ describe("Peep", () => {
       expect(allPeeps.peeps.length).toEqual(2);
       expect(allPeeps.peeps[0].userId).toEqual(user?.id);
       expect(allPeeps.peeps[0].text).toEqual("First peep");
+      expect(allPeeps.peeps[0].username).toEqual("bob");
       expect(allPeeps.peeps[1].userId).toEqual(user?.id);
       expect(allPeeps.peeps[1].text).toEqual("Second peep");
+      expect(allPeeps.peeps[1].username).toEqual("bob");
     });
   });
 
@@ -34,6 +36,7 @@ describe("Peep", () => {
 
       expect(peep.userId).toEqual(user?.id);
       expect(peep.text).toEqual("Peep text");
+      expect(peep.username).toEqual("bob");
     });
 
     it("stores the peep in the database", async () => {

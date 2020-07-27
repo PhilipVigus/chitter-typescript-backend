@@ -1,7 +1,7 @@
 import User from "../model/User";
 import PGConnection from "../model/PGConnection";
 
-describe("Peep", () => {
+describe("User", () => {
   beforeEach(async () => {
     await PGConnection.open();
   });
