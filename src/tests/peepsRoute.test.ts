@@ -35,8 +35,18 @@ describe("/peeps endpoint", () => {
 
   describe("GET /peeps/:id", () => {
     it("returns status 200", async () => {
-      const res = await request(app.server).get("/peeps/1");
+      const user = await User.create("bob", "12345678");
+      const peep = await Peep.create(user?.id as number, "First peep");
+      const res = await request(app.server).get(`/peeps/${peep.id}`);
       expect(res.status).toBe(200);
+    });
+
+    it("gets the peep", async () => {
+      const user = await User.create("bob", "12345678");
+      const peep = await Peep.create(user?.id as number, "First peep");
+      const res = await request(app.server).get(`/peeps/${peep.id}`);
+      expect(res.body.username).toEqual("bob");
+      expect(res.body.text).toEqual("First peep");
     });
   });
 

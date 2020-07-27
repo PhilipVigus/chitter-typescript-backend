@@ -60,6 +60,22 @@ class Peep {
     );
   }
 
+  public static async findById(id: number): Promise<Peep | null> {
+    const result = await PGConnection.query(
+      `SELECT * FROM Peeps WHERE id=${id};`
+    );
+
+    const peepData = result.rows[0];
+
+    return new Peep(
+      peepData.id,
+      peepData.user_id,
+      (await User.findById(peepData.user_id))?.username as string,
+      peepData.text,
+      peepData.created_at
+    );
+  }
+
   public toJSON(): {
     id: number;
     userId: number;
@@ -74,6 +90,10 @@ class Peep {
       text: this._text,
       timeCreated: this._timeCreated
     };
+  }
+
+  get id(): number {
+    return this._id;
   }
 
   get userId(): number {
