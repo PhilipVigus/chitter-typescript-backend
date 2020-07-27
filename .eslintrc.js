@@ -19,6 +19,7 @@ module.exports = {
     }
   },
   rules: {
-    "no-underscore-dangle": ["error", { allowAfterThis: true }]
+    "no-underscore-dangle": ["error", { allowAfterThis: true }],
+    "no-else-return": "off"
   }
 };

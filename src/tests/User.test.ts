@@ -30,4 +30,14 @@ describe("Peep", () => {
       expect(user).toBeNull();
     });
   });
+
+  describe("findById", () => {
+    it("returns the user with the specified id", async () => {
+      const user = await User.create("Bob", "12345678");
+
+      expect((await User.findById(user?.id as number))?.username).toEqual(
+        "Bob"
+      );
+    });
+  });
 });
