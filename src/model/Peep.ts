@@ -65,6 +65,10 @@ class Peep {
       `SELECT * FROM Peeps WHERE id=${id};`
     );
 
+    if (result.rowCount === 0) {
+      return null;
+    }
+
     const peepData = result.rows[0];
 
     return new Peep(
