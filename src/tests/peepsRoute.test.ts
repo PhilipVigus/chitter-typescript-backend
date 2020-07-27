@@ -17,7 +17,7 @@ describe("/peeps endpoint", () => {
     await app.stop();
   });
 
-  describe("GET", () => {
+  describe("GET /peeps", () => {
     it("returns status 200", async () => {
       const res = await request(app.server).get("/peeps");
       expect(res.status).toBe(200);
@@ -30,6 +30,31 @@ describe("/peeps endpoint", () => {
       const res = await request(app.server).get("/peeps");
       expect(res.body.peeps.length).toEqual(2);
       expect(res.body.peeps[0].username).toEqual("bob");
+    });
+  });
+
+  describe("GET /peeps/:id", () => {
+    it("returns status 200", async () => {
+      const user = await User.create("bob", "12345678");
+      const peep = await Peep.create(user?.id as number, "First peep");
+      const res = await request(app.server).get(`/peeps/${peep.id}`);
+      expect(res.status).toBe(200);
+    });
+
+    it("gets the peep", async () => {
+      const user = await User.create("bob", "12345678");
+      const peep = await Peep.create(user?.id as number, "First peep");
+      const res = await request(app.server).get(`/peeps/${peep.id}`);
+      expect(res.body.username).toEqual("bob");
+      expect(res.body.text).toEqual("First peep");
+    });
+
+    it("returns an error if the peep isn't found", async () => {
+      const user = await User.create("bob", "12345678");
+      const peep = await Peep.create(user?.id as number, "First peep");
+      const res = await request(app.server).get(`/peeps/${peep.id + 1}`);
+      expect(res.status).toEqual(422);
+      expect(res.body.error).toEqual("Peep not found");
     });
   });
 

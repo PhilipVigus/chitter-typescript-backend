@@ -47,4 +47,23 @@ describe("Peep", () => {
       expect(result.rowCount).toEqual(1);
     });
   });
+
+  describe("findById", () => {
+    it("returns the peep with the given id", async () => {
+      const user = await User.create("bob", "12345678");
+      const peep = await Peep.create(user?.id as number, "Peep text");
+      const foundPeep = await Peep.findById(peep.id);
+
+      expect(foundPeep?.username).toEqual("bob");
+      expect(foundPeep?.text).toEqual("Peep text");
+    });
+
+    it("returns null if the id doesnt exist", async () => {
+      const user = await User.create("bob", "12345678");
+      const peep = await Peep.create(user?.id as number, "Peep text");
+      const foundPeep = await Peep.findById(peep.id + 1);
+
+      expect(foundPeep).toBeNull();
+    });
+  });
 });
