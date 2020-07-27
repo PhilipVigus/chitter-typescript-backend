@@ -60,6 +60,22 @@ class Peep {
     );
   }
 
+  public toJSON(): {
+    id: number;
+    userId: number;
+    username: string;
+    text: string;
+    timeCreated: Date;
+  } {
+    return {
+      id: this._id,
+      userId: this._userId,
+      username: this._username,
+      text: this._text,
+      timeCreated: this._timeCreated
+    };
+  }
+
   get userId(): number {
     return this._userId;
   }
