@@ -8,7 +8,7 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
-  await Peep.create(req.body.text);
+  await Peep.create(req.body.userId, req.body.text);
   res.status(200);
   res.end();
 });
