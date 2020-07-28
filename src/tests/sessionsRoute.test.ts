@@ -12,7 +12,7 @@ describe("/sessions endpoint", () => {
   });
 
   afterEach(async () => {
-    await PGConnection.query("TRUNCATE users, peeps;");
+    await PGConnection.query("TRUNCATE peeps, users, comments;");
     await app.stop();
   });
 

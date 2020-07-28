@@ -1,0 +1,1 @@
+CREATE TABLE comments (id serial PRIMARY KEY, user_id INTEGER REFERENCES users (id), peep_id INTEGER REFERENCES peeps (id), text VARCHAR (280) NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT now());

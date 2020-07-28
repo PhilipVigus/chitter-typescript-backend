@@ -1,5 +1,6 @@
 import PGConnection from "./PGConnection";
 import User from "./User";
+import Comment from "./Comment";
 
 class Peep {
   private _id: number;
@@ -9,6 +10,8 @@ class Peep {
   private _username: string;
 
   private _text: string;
+
+  private _comments: Array<Comment>;
 
   private _timeCreated: Date;
 
@@ -23,6 +26,7 @@ class Peep {
     this._userId = userId;
     this._username = username;
     this._text = text;
+    this._comments = [];
     this._timeCreated = timeCreated;
   }
 
@@ -30,13 +34,17 @@ class Peep {
     const result = await PGConnection.query("SELECT * FROM Peeps;");
     const peeps = await Promise.all(
       result.rows.map(async (row) => {
-        return new Peep(
+        const peep = new Peep(
           row.id,
           row.user_id,
           (await User.findById(row.user_id))?.username as string,
           row.text,
           row.created_at
         );
+
+        peep.comments = await Comment.allFromPeep(peep.id);
+
+        return peep;
       })
     );
 
@@ -51,13 +59,17 @@ class Peep {
     const username = (await User.findById(newPeepAttributes.user_id))
       ?.username as string;
 
-    return new Peep(
+    const peep = new Peep(
       newPeepAttributes.id,
       newPeepAttributes.user_id,
       username,
       newPeepAttributes.text,
       newPeepAttributes.created_at
     );
+
+    peep.comments = await Comment.allFromPeep(peep.id);
+
+    return peep;
   }
 
   public static async findById(id: number): Promise<Peep | null> {
@@ -71,13 +83,17 @@ class Peep {
 
     const peepData = result.rows[0];
 
-    return new Peep(
+    const peep = new Peep(
       peepData.id,
       peepData.user_id,
       (await User.findById(peepData.user_id))?.username as string,
       peepData.text,
       peepData.created_at
     );
+
+    peep.comments = await Comment.allFromPeep(peep.id);
+
+    return peep;
   }
 
   public toJSON(): {
@@ -85,6 +101,14 @@ class Peep {
     userId: number;
     username: string;
     text: string;
+    comments: {
+      id: number;
+      userId: number;
+      peepId: number;
+      username: string;
+      text: string;
+      timeCreated: Date;
+    }[];
     timeCreated: Date;
   } {
     return {
@@ -92,6 +116,9 @@ class Peep {
       userId: this._userId,
       username: this._username,
       text: this._text,
+      comments: this._comments.map((comment) => {
+        return comment.toJSON();
+      }),
       timeCreated: this._timeCreated
     };
   }
@@ -110,6 +137,14 @@ class Peep {
 
   get text(): string {
     return this._text;
+  }
+
+  get comments(): Comment[] {
+    return this._comments;
+  }
+
+  set comments(newComments: Comment[]) {
+    this._comments = newComments;
   }
 
   get timeCreated(): Date {

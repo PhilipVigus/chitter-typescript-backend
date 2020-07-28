@@ -1,4 +1,4 @@
-import express, { Request, Response, request } from "express";
+import express, { Request, Response } from "express";
 import Peep from "../model/Peep";
 
 const router = express.Router();
