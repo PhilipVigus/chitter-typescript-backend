@@ -1,5 +1,6 @@
 import Peep from "../model/Peep";
 import User from "../model/User";
+import Comment from "../model/Comment";
 import PGConnection from "../model/PGConnection";
 
 describe("Peep", () => {
@@ -33,10 +34,18 @@ describe("Peep", () => {
     it("returns the created peep", async () => {
       const user = await User.create("bob", "12345678");
       const peep = await Peep.create(user?.id as number, "Peep text");
+      await Comment.create(
+        user?.id as number,
+        peep?.id as number,
+        "Comment text"
+      );
 
-      expect(peep.userId).toEqual(user?.id);
-      expect(peep.text).toEqual("Peep text");
-      expect(peep.username).toEqual("bob");
+      const peepWithComments = await Peep.findById(peep?.id);
+      expect(peepWithComments?.userId).toEqual(user?.id);
+      expect(peepWithComments?.text).toEqual("Peep text");
+      expect(peepWithComments?.username).toEqual("bob");
+      expect(peepWithComments?.comments.length).toEqual(1);
+      expect(peepWithComments?.comments[0].text).toEqual("Comment text");
     });
 
     it("stores the peep in the database", async () => {
