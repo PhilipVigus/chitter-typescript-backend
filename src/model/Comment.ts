@@ -73,6 +73,24 @@ class Comment {
     return comments;
   }
 
+  public toJSON(): {
+    id: number;
+    userId: number;
+    peepId: number;
+    username: string;
+    text: string;
+    timeCreated: Date;
+  } {
+    return {
+      id: this._id,
+      userId: this._userId,
+      peepId: this._peepId,
+      username: this._username,
+      text: this._text,
+      timeCreated: this._timeCreated
+    };
+  }
+
   get id(): number {
     return this._id;
   }

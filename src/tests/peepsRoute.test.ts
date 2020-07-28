@@ -2,6 +2,7 @@ import request from "supertest";
 import PGConnection from "../model/PGConnection";
 import Peep from "../model/Peep";
 import User from "../model/User";
+import Comment from "../model/Comment";
 import App from "../App";
 
 describe("/peeps endpoint", () => {
@@ -25,11 +26,18 @@ describe("/peeps endpoint", () => {
 
     it("gets the peeps", async () => {
       const user = await User.create("bob", "12345678");
-      await Peep.create(user?.id as number, "First peep");
+      const peep = await Peep.create(user?.id as number, "First peep");
       await Peep.create(user?.id as number, "Second peep");
+      await Comment.create(
+        user?.id as number,
+        peep?.id as number,
+        "Comment text"
+      );
+
       const res = await request(app.server).get("/peeps");
       expect(res.body.peeps.length).toEqual(2);
       expect(res.body.peeps[0].username).toEqual("bob");
+      expect(res.body.peeps[0].comments.length).toEqual(1);
     });
   });
 

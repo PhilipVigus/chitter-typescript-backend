@@ -20,7 +20,7 @@ describe("/peeps/:id/comments endpoint", () => {
   describe("POST /peeps/:id/comments", () => {
     it("returns status 200", async () => {
       const user = await User.create("bob", "12345678");
-      const peep = await Peep.create(user?.id, "a peep");
+      const peep = await Peep.create(user?.id as number, "a peep");
       const res = await request(app.server)
         .post("/peeps/1/comments")
         .send({
@@ -33,7 +33,7 @@ describe("/peeps/:id/comments endpoint", () => {
 
     it("stores the comment in the database", async () => {
       const user = await User.create("bob", "12345678");
-      const peep = await Peep.create(user?.id, "a peep");
+      const peep = await Peep.create(user?.id as number, "a peep");
       const res = await request(app.server)
         .post("/peeps/1/comments")
         .send({

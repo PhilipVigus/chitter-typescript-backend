@@ -101,6 +101,14 @@ class Peep {
     userId: number;
     username: string;
     text: string;
+    comments: {
+      id: number;
+      userId: number;
+      peepId: number;
+      username: string;
+      text: string;
+      timeCreated: Date;
+    }[];
     timeCreated: Date;
   } {
     return {
@@ -108,6 +116,9 @@ class Peep {
       userId: this._userId,
       username: this._username,
       text: this._text,
+      comments: this._comments.map((comment) => {
+        return comment.toJSON();
+      }),
       timeCreated: this._timeCreated
     };
   }
