@@ -13,13 +13,4 @@ router.post("/", async (req: Request, res: Response) => {
   res.end();
 });
 
-router.get("/:id", async (req: Request, res: Response) => {
-  const peep = await Peep.findById(parseInt(req.params.id, 10));
-  if (peep) {
-    res.status(200).send(peep);
-  } else {
-    res.status(422).send({ error: "Peep not found" });
-  }
-});
-
 export default router;
