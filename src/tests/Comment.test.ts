@@ -29,4 +29,36 @@ describe("Comment", () => {
       expect(comment?.username).toEqual("bob");
     });
   });
+
+  describe("allFromPeep", () => {
+    it("returns all comments with the specified peep id", async () => {
+      const user = await User.create("bob", "12345678");
+      const firstPeep = await Peep.create(user?.id as number, "Peep text");
+      const secondPeep = await Peep.create(user?.id as number, "Peep text");
+
+      await Comment.create(
+        user?.id as number,
+        firstPeep?.id as number,
+        "First comment"
+      );
+
+      await Comment.create(
+        user?.id as number,
+        firstPeep?.id as number,
+        "Second comment"
+      );
+
+      await Comment.create(
+        user?.id as number,
+        secondPeep?.id as number,
+        "Third comment"
+      );
+
+      const comments = await Comment.allFromPeep(firstPeep?.id);
+
+      expect(comments.length).toEqual(2);
+      expect(comments[0].text).toEqual("First comment");
+      expect(comments[1].text).toEqual("Second comment");
+    });
+  });
 });

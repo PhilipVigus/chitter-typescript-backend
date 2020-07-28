@@ -52,6 +52,27 @@ class Comment {
     );
   }
 
+  public static async allFromPeep(peepId: number): Promise<Comment[]> {
+    const result = await PGConnection.query(
+      `SELECT * FROM comments WHERE peep_id=${peepId};`
+    );
+
+    const comments = await Promise.all(
+      result.rows.map(async (row) => {
+        return new Comment(
+          row.id,
+          row.user_id,
+          row.peep_id,
+          (await User.findById(row.user_id))?.username as string,
+          row.text,
+          row.created_at
+        );
+      })
+    );
+
+    return comments;
+  }
+
   get id(): number {
     return this._id;
   }
