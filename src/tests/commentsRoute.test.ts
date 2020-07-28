@@ -13,14 +13,38 @@ describe("/peeps/:id/comments endpoint", () => {
   });
 
   afterEach(async () => {
-    await PGConnection.query("TRUNCATE peeps, users;");
+    await PGConnection.query("TRUNCATE peeps, users, comments;");
     await app.stop();
   });
 
   describe("POST /peeps/:id/comments", () => {
     it("returns status 200", async () => {
-      const res = await request(app.server).post("/peeps/1/comments");
+      const user = await User.create("bob", "12345678");
+      const peep = await Peep.create(user?.id, "a peep");
+      const res = await request(app.server)
+        .post("/peeps/1/comments")
+        .send({
+          userId: user?.id as number,
+          peepId: peep?.id as number,
+          text: "new comment"
+        });
       expect(res.status).toBe(200);
+    });
+
+    it("stores the comment in the database", async () => {
+      const user = await User.create("bob", "12345678");
+      const peep = await Peep.create(user?.id, "a peep");
+      const res = await request(app.server)
+        .post("/peeps/1/comments")
+        .send({
+          userId: user?.id as number,
+          peepId: peep?.id as number,
+          text: "new comment"
+        });
+
+      const result = await PGConnection.query("SELECT * FROM comments;");
+      expect(result.rowCount).toEqual(1);
+      expect(result.rows[0].text).toEqual("new comment");
     });
   });
 });

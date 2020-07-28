@@ -12,6 +12,7 @@ describe("Comment", () => {
     await PGConnection.query("TRUNCATE peeps, users, comments;");
     await PGConnection.close();
   });
+
   describe("create", () => {
     it("returns the created comment", async () => {
       const user = await User.create("bob", "12345678");

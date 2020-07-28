@@ -8,7 +8,7 @@ describe("Peep", () => {
   });
 
   afterEach(async () => {
-    await PGConnection.query("TRUNCATE peeps, users;");
+    await PGConnection.query("TRUNCATE peeps, users, comments;");
     await PGConnection.close();
   });
 

@@ -11,7 +11,7 @@ describe("/users endpoint", () => {
   });
 
   afterEach(async () => {
-    await PGConnection.query("TRUNCATE users, peeps;");
+    await PGConnection.query("TRUNCATE users, peeps, comments;");
     await app.stop();
   });
 
