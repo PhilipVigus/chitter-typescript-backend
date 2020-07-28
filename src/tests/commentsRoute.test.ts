@@ -17,9 +17,9 @@ describe("/peeps/:id/comments endpoint", () => {
     await app.stop();
   });
 
-  describe("GET /peeps/:id/comments", () => {
+  describe("POST /peeps/:id/comments", () => {
     it("returns status 200", async () => {
-      const res = await request(app.server).get("/peeps/1/comments");
+      const res = await request(app.server).post("/peeps/1/comments");
       expect(res.status).toBe(200);
     });
   });
