@@ -8,4 +8,12 @@ router.post("/:peepId/likes/", async (req: Request, res: Response) => {
   res.status(200).send();
 });
 
+router.delete("/:peepId/likes/:userId", async (req: Request, res: Response) => {
+  await Like.delete(
+    parseInt(req.params.userId, 10),
+    parseInt(req.params.peepId, 10)
+  );
+  res.status(200).send();
+});
+
 export default router;

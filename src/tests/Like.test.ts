@@ -58,7 +58,7 @@ describe("Like", () => {
       const peep = await Peep.create(user?.id as number, "Peep text");
       await Like.create(user?.id as number, peep?.id as number);
 
-      Like.delete(user?.id, peep?.id);
+      Like.delete(user?.id as number, peep?.id);
 
       const res = await PGConnection.query("SELECT * FROM likes;");
 
