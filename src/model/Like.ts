@@ -49,6 +49,25 @@ class Like {
     );
   }
 
+  public static async allFromPeep(peepId: number): Promise<Like[]> {
+    const result = await PGConnection.query(
+      `SELECT * FROM likes WHERE peep_id=${peepId};`
+    );
+
+    const likes = await Promise.all(
+      result.rows.map(async (row) => {
+        return new Like(
+          row.id,
+          row.user_id,
+          row.peep_id,
+          (await User.findById(row.user_id))?.username as string
+        );
+      })
+    );
+
+    return likes;
+  }
+
   get id(): number {
     return this._id;
   }

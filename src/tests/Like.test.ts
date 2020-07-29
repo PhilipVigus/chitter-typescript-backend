@@ -35,4 +35,20 @@ describe("Like", () => {
       expect(like).toBeNull();
     });
   });
+
+  describe("allFromPeep", () => {
+    it("returns all likes from the specified peep id", async () => {
+      const bob = await User.create("bob", "12345678");
+      const steve = await User.create("steve", "12345678");
+      const peep = await Peep.create(bob?.id as number, "Peep text");
+      await Like.create(bob?.id as number, peep?.id as number);
+      await Like.create(steve?.id as number, peep?.id as number);
+
+      const likes = await Like.allFromPeep(peep.id);
+
+      expect(likes.length).toBe(2);
+      expect(likes[0].username).toBe("bob");
+      expect(likes[1].username).toBe("steve");
+    });
+  });
 });
