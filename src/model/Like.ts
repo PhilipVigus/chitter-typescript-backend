@@ -22,7 +22,18 @@ class Like {
     this._username = username;
   }
 
-  public static async create(userId: number, peepId: number): Promise<Like> {
+  public static async create(
+    userId: number,
+    peepId: number
+  ): Promise<Like | null> {
+    const existingLikes = await PGConnection.query(
+      `SELECT * FROM likes WHERE peep_id=${peepId} AND user_id=${userId};`
+    );
+
+    if (existingLikes.rowCount !== 0) {
+      return null;
+    }
+
     const result = await PGConnection.query(
       `INSERT INTO likes (user_id, peep_id) VALUES (${userId}, ${peepId}) RETURNING id, user_id, peep_id;`
     );

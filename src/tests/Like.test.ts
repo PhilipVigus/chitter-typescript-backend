@@ -16,7 +16,7 @@ describe("Like", () => {
   });
 
   describe("create", () => {
-    it("returns the created comment", async () => {
+    it("returns the created like", async () => {
       const user = await User.create("bob", "12345678");
       const peep = await Peep.create(user?.id as number, "Peep text");
       const like = await Like.create(user?.id as number, peep?.id as number);
@@ -24,6 +24,15 @@ describe("Like", () => {
       expect(like?.userId).toEqual(user?.id);
       expect(like?.peepId).toEqual(peep?.id);
       expect(like?.username).toEqual("bob");
+    });
+
+    it("returns null if the peep already has a like from the user", async () => {
+      const user = await User.create("bob", "12345678");
+      const peep = await Peep.create(user?.id as number, "Peep text");
+      await Like.create(user?.id as number, peep?.id as number);
+      const like = await Like.create(user?.id as number, peep?.id as number);
+
+      expect(like).toBeNull();
     });
   });
 });
