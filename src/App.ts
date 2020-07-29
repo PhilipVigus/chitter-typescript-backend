@@ -11,6 +11,7 @@ import peepsRoute from "./routes/peepsRoute";
 import usersRoute from "./routes/usersRoute";
 import sessionsRoute from "./routes/sessionsRoute";
 import commentsRoute from "./routes/commentsRoute";
+import likesRoute from "./routes/likesRoute";
 
 dotenv.config();
 
@@ -40,6 +41,8 @@ class App {
     this._app.use("/users", usersRoute);
     this._app.use("/sessions", sessionsRoute);
     this._app.use("/peeps/", commentsRoute);
+    this._app.use("/peeps/", likesRoute);
+
     this._server = http.createServer(this._app);
 
     createTerminus(this._server, {
