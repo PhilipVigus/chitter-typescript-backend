@@ -51,4 +51,18 @@ describe("Like", () => {
       expect(likes[1].username).toBe("steve");
     });
   });
+
+  describe("delete", () => {
+    it("deletes the like with the specified userid and peepid", async () => {
+      const user = await User.create("bob", "12345678");
+      const peep = await Peep.create(user?.id as number, "Peep text");
+      await Like.create(user?.id as number, peep?.id as number);
+
+      Like.delete(user?.id, peep?.id);
+
+      const res = await PGConnection.query("SELECT * FROM likes;");
+
+      expect(res.rowCount).toBe(0);
+    });
+  });
 });

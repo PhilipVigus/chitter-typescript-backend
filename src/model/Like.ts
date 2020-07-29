@@ -68,6 +68,12 @@ class Like {
     return likes;
   }
 
+  public static async delete(userId: number, peepId: number): Promise<void> {
+    PGConnection.query(
+      `DELETE FROM likes WHERE user_id=${userId} AND peep_id=${peepId};`
+    );
+  }
+
   public toJSON(): {
     userId: number;
     peepId: number;
