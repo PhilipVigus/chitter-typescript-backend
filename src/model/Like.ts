@@ -68,6 +68,18 @@ class Like {
     return likes;
   }
 
+  public toJSON(): {
+    userId: number;
+    peepId: number;
+    username: string;
+  } {
+    return {
+      userId: this._userId,
+      peepId: this._peepId,
+      username: this._username
+    };
+  }
+
   get id(): number {
     return this._id;
   }

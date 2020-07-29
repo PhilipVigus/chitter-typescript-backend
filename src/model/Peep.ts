@@ -1,6 +1,7 @@
 import PGConnection from "./PGConnection";
 import User from "./User";
 import Comment from "./Comment";
+import Like from "./Like";
 
 class Peep {
   private _id: number;
@@ -12,6 +13,8 @@ class Peep {
   private _text: string;
 
   private _comments: Array<Comment>;
+
+  private _likes: Array<Like>;
 
   private _timeCreated: Date;
 
@@ -27,6 +30,7 @@ class Peep {
     this._username = username;
     this._text = text;
     this._comments = [];
+    this._likes = [];
     this._timeCreated = timeCreated;
   }
 
@@ -43,6 +47,7 @@ class Peep {
         );
 
         peep.comments = await Comment.allFromPeep(peep.id);
+        peep.likes = await Like.allFromPeep(peep.id);
 
         return peep;
       })
@@ -68,6 +73,7 @@ class Peep {
     );
 
     peep.comments = await Comment.allFromPeep(peep.id);
+    peep.likes = await Like.allFromPeep(peep.id);
 
     return peep;
   }
@@ -92,6 +98,7 @@ class Peep {
     );
 
     peep.comments = await Comment.allFromPeep(peep.id);
+    peep.likes = await Like.allFromPeep(peep.id);
 
     return peep;
   }
@@ -109,6 +116,11 @@ class Peep {
       text: string;
       timeCreated: Date;
     }[];
+    likes: {
+      userId: number;
+      peepId: number;
+      username: string;
+    }[];
     timeCreated: Date;
   } {
     return {
@@ -118,6 +130,9 @@ class Peep {
       text: this._text,
       comments: this._comments.map((comment) => {
         return comment.toJSON();
+      }),
+      likes: this.likes.map((like) => {
+        return like.toJSON();
       }),
       timeCreated: this._timeCreated
     };
@@ -145,6 +160,14 @@ class Peep {
 
   set comments(newComments: Comment[]) {
     this._comments = newComments;
+  }
+
+  get likes(): Like[] {
+    return this._likes;
+  }
+
+  set likes(newLikes: Like[]) {
+    this._likes = newLikes;
   }
 
   get timeCreated(): Date {
