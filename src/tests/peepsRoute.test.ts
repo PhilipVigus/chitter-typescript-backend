@@ -4,6 +4,7 @@ import Peep from "../model/Peep";
 import User from "../model/User";
 import Comment from "../model/Comment";
 import App from "../App";
+import Like from "../model/Like";
 
 describe("/peeps endpoint", () => {
   let app: App;
@@ -14,7 +15,9 @@ describe("/peeps endpoint", () => {
   });
 
   afterEach(async () => {
-    await PGConnection.query("TRUNCATE peeps, users, comments;");
+    await PGConnection.query(
+      "DELETE FROM likes; DELETE FROM comments; DELETE FROM peeps; DELETE FROM users;"
+    );
     await app.stop();
   });
 
@@ -33,11 +36,13 @@ describe("/peeps endpoint", () => {
         peep?.id as number,
         "Comment text"
       );
+      await Like.create(user?.id as number, peep?.id as number);
 
       const res = await request(app.server).get("/peeps");
       expect(res.body.peeps.length).toEqual(2);
       expect(res.body.peeps[0].username).toEqual("bob");
       expect(res.body.peeps[0].comments.length).toEqual(1);
+      expect(res.body.peeps[0].likes.length).toEqual(1);
     });
   });
 

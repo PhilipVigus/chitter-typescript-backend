@@ -1,0 +1,1 @@
+CREATE TABLE likes (id serial PRIMARY KEY, user_id INTEGER REFERENCES users (id), peep_id INTEGER REFERENCES peeps (id));

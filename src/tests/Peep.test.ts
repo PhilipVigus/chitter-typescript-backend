@@ -1,6 +1,7 @@
 import Peep from "../model/Peep";
 import User from "../model/User";
 import Comment from "../model/Comment";
+import Like from "../model/Like";
 import PGConnection from "../model/PGConnection";
 
 describe("Peep", () => {
@@ -9,7 +10,9 @@ describe("Peep", () => {
   });
 
   afterEach(async () => {
-    await PGConnection.query("TRUNCATE peeps, users, comments;");
+    await PGConnection.query(
+      "DELETE FROM likes; DELETE FROM comments; DELETE FROM peeps; DELETE FROM users;"
+    );
     await PGConnection.close();
   });
 
@@ -39,13 +42,16 @@ describe("Peep", () => {
         peep?.id as number,
         "Comment text"
       );
+      await Like.create(user?.id as number, peep?.id as number);
 
-      const peepWithComments = await Peep.findById(peep?.id);
-      expect(peepWithComments?.userId).toEqual(user?.id);
-      expect(peepWithComments?.text).toEqual("Peep text");
-      expect(peepWithComments?.username).toEqual("bob");
-      expect(peepWithComments?.comments.length).toEqual(1);
-      expect(peepWithComments?.comments[0].text).toEqual("Comment text");
+      const completedPeep = await Peep.findById(peep?.id);
+      expect(completedPeep?.userId).toEqual(user?.id);
+      expect(completedPeep?.text).toEqual("Peep text");
+      expect(completedPeep?.username).toEqual("bob");
+      expect(completedPeep?.comments.length).toEqual(1);
+      expect(completedPeep?.comments[0].text).toEqual("Comment text");
+      expect(completedPeep?.likes.length).toEqual(1);
+      expect(completedPeep?.likes[0].username).toEqual("bob");
     });
 
     it("stores the peep in the database", async () => {
