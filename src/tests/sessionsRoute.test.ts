@@ -12,9 +12,7 @@ describe("/sessions endpoint", () => {
   });
 
   afterEach(async () => {
-    await PGConnection.query(
-      "DELETE FROM likes; DELETE FROM comments; DELETE FROM peeps; DELETE FROM users;"
-    );
+    await PGConnection.query("TRUNCATE likes, comments, peeps, users CASCADE;");
     await app.stop();
   });
 
