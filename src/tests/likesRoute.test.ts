@@ -50,8 +50,8 @@ describe("/peeps/:id/likes endpoint", () => {
   describe("DELETE /peeps/:peepId/likes/:userId", () => {
     it("returns status 200", async () => {
       const user = await User.create("bob", "12345678");
-      const peep = await Peep.create(user?.id, "a peep");
-      await Like.create(user?.id, peep?.id);
+      const peep = await Peep.create(user?.id as number, "a peep");
+      await Like.create(user?.id as number, peep?.id);
 
       const res = await request(app.server)
         .delete(`/peeps/${peep?.id}/likes/${user?.id}`)
@@ -63,7 +63,7 @@ describe("/peeps/:id/likes endpoint", () => {
     it("deletes the like from the database", async () => {
       const user = await User.create("bob", "12345678");
       const peep = await Peep.create(user?.id, "a peep");
-      await Like.create(user?.id, peep?.id);
+      await Like.create(user?.id as number, peep?.id);
 
       await request(app.server)
         .delete(`/peeps/${peep?.id}/likes/${user?.id}`)
