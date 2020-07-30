@@ -14,9 +14,7 @@ describe("/peeps/:id/likes endpoint", () => {
   });
 
   afterEach(async () => {
-    await PGConnection.query(
-      "DELETE FROM likes; DELETE FROM comments; DELETE FROM peeps; DELETE FROM users;"
-    );
+    await PGConnection.query("TRUNCATE likes, comments, peeps, users CASCADE;");
     await app.stop();
   });
 
@@ -62,7 +60,7 @@ describe("/peeps/:id/likes endpoint", () => {
 
     it("deletes the like from the database", async () => {
       const user = await User.create("bob", "12345678");
-      const peep = await Peep.create(user?.id, "a peep");
+      const peep = await Peep.create(user?.id as number, "a peep");
       await Like.create(user?.id as number, peep?.id);
 
       await request(app.server)
