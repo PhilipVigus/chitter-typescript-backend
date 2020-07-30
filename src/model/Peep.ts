@@ -116,11 +116,7 @@ class Peep {
       text: string;
       timeCreated: Date;
     }[];
-    likes: {
-      userId: number;
-      peepId: number;
-      username: string;
-    }[];
+    likes: string[];
     timeCreated: Date;
   } {
     return {

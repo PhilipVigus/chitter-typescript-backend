@@ -57,7 +57,20 @@ describe("/peeps/:id/likes endpoint", () => {
         .delete(`/peeps/${peep?.id}/likes/${user?.id}`)
         .send();
 
-      //expect(res.status).toBe(200);
+      expect(res.status).toBe(200);
+    });
+
+    it("deletes the like from the database", async () => {
+      const user = await User.create("bob", "12345678");
+      const peep = await Peep.create(user?.id, "a peep");
+      await Like.create(user?.id, peep?.id);
+
+      await request(app.server)
+        .delete(`/peeps/${peep?.id}/likes/${user?.id}`)
+        .send();
+
+      const result = await PGConnection.query("SELECT * FROM likes;");
+      expect(result.rowCount).toEqual(0);
     });
   });
 });

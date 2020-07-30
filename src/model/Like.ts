@@ -74,16 +74,8 @@ class Like {
     );
   }
 
-  public toJSON(): {
-    userId: number;
-    peepId: number;
-    username: string;
-  } {
-    return {
-      userId: this._userId,
-      peepId: this._peepId,
-      username: this._username
-    };
+  public toJSON(): string {
+    return this._username;
   }
 
   get id(): number {
