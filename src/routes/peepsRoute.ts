@@ -1,16 +1,8 @@
-import express, { Request, Response } from "express";
-import Peep from "../model/Peep";
+import express from "express";
+import PeepsController from "../controllers/PeepsController";
 
 const router = express.Router();
-
-router.get("/", async (req: Request, res: Response) => {
-  res.send(await Peep.all());
-});
-
-router.post("/", async (req: Request, res: Response) => {
-  await Peep.create(req.body.userId, req.body.text);
-  res.status(200);
-  res.end();
-});
+router.get("/", PeepsController.getPeeps);
+router.post("/", PeepsController.createPeep);
 
 export default router;
