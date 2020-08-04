@@ -1,1 +1,1 @@
-CREATE TABLE Peeps (id serial PRIMARY KEY, text VARCHAR (280) NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT now());
+CREATE TABLE peeps (id serial PRIMARY KEY, user_id INTEGER REFERENCES users (id), text VARCHAR (280) NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT now());
