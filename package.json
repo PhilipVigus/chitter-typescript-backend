@@ -11,6 +11,7 @@
     "postinstall": "npm build",
     "start": "node .",
     "test": "jest --clearCache && jest -i --watch",
+    "testWithCoverage": "jest --clearCache && jest -i --coverage --watchAll=false",
     "tsc": "tsc",
     "lint": "eslint ./src/**/* --ext .ts"
   },

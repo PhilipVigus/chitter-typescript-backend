@@ -75,10 +75,6 @@ class Like {
     return this._username;
   }
 
-  get id(): number {
-    return this._id;
-  }
-
   get userId(): number {
     return this._userId;
   }

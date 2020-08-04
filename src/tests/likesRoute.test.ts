@@ -33,7 +33,7 @@ describe("/peeps/:id/likes endpoint", () => {
     it("stores the like in the database", async () => {
       const user = await User.create("bob", "12345678");
       const peep = await Peep.create(user?.id as number, "a peep");
-      const res = await request(app.server)
+      await request(app.server)
         .post(`/peeps/${peep?.id}/likes`)
         .send({
           userId: user?.id as number
