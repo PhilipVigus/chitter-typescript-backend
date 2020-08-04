@@ -80,7 +80,9 @@ class Peep {
 
   public static async findById(id: number): Promise<Peep | null> {
     const result = await PGConnection.query(
-      `SELECT * FROM Peeps WHERE id=${id};`
+      `SELECT peeps.id, peeps.user_id, peeps.text, peeps.created_at, users.username 
+      FROM users, peeps 
+      WHERE users.id = peeps.user_id AND peeps.id=${id};`
     );
 
     if (result.rowCount === 0) {
@@ -92,7 +94,7 @@ class Peep {
     const peep = new Peep(
       peepData.id,
       peepData.user_id,
-      (await User.findById(peepData.user_id))?.username as string,
+      peepData.username,
       peepData.text,
       peepData.created_at
     );

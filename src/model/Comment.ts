@@ -54,7 +54,9 @@ class Comment {
 
   public static async allFromPeep(peepId: number): Promise<Comment[]> {
     const result = await PGConnection.query(
-      `SELECT * FROM comments WHERE peep_id=${peepId};`
+      `SELECT comments.id, comments.user_id, comments.peep_id, comments.text, comments.created_at, users.username
+      FROM comments, users
+      WHERE comments.user_id=users.id AND comments.peep_id=${peepId};`
     );
 
     const comments = await Promise.all(
@@ -63,7 +65,7 @@ class Comment {
           row.id,
           row.user_id,
           row.peep_id,
-          (await User.findById(row.user_id))?.username as string,
+          row.username,
           row.text,
           row.created_at
         );
