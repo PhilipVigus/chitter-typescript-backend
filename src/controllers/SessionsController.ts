@@ -17,10 +17,6 @@ class SessionsController {
     ) {
       res.status(422).send({ error: "Incorrect login details" });
     } else {
-      if (req.session) {
-        res.cookie("username", userData.rows[0].username);
-        res.cookie("id", userData.rows[0].id);
-      }
       res
         .status(200)
         .send({ id: userData.rows[0].id, username: userData.rows[0].username });
