@@ -30,7 +30,9 @@ class App {
       cookieSession({
         name: "session",
         keys: ["some string"],
-        maxAge: 24 * 60 * 60 * 1000
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: true
       })
     );
     this._app.use(cors({ origin: true, credentials: true }));
