@@ -2,8 +2,6 @@ import express, { Application } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
-import cookieParser from "cookie-parser";
-import cookieSession from "cookie-session";
 import http, { Server } from "http";
 import { createTerminus } from "@godaddy/terminus";
 import PGConnection from "./model/PGConnection";
@@ -25,16 +23,6 @@ class App {
   public constructor() {
     this._app = express();
     this._app.use(helmet());
-    this._app.use(cookieParser());
-    this._app.use(
-      cookieSession({
-        name: "session",
-        keys: ["some string"],
-        maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: true,
-        secure: true
-      })
-    );
     this._app.use(cors({ origin: true, credentials: true }));
     this._app.options("*", cors({ origin: true, credentials: true }));
     this._app.use(express.json());
