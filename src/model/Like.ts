@@ -51,7 +51,9 @@ class Like {
 
   public static async allFromPeep(peepId: number): Promise<Like[]> {
     const result = await PGConnection.query(
-      `SELECT likes.id, likes.user_id, likes.peep_id, users.username FROM likes, users WHERE likes.user_id=users.id AND peep_id=${peepId};`
+      `SELECT likes.id, likes.user_id, likes.peep_id, users.username
+      FROM likes, users
+      WHERE likes.user_id=users.id AND likes.peep_id=${peepId};`
     );
 
     const likes = await Promise.all(
