@@ -7,7 +7,16 @@ class PGConnection {
   private static pool: Pool;
 
   public static open(): void {
+    if (process.env.NODE_ENV === "production") {
+      PGConnection.pool = new Pool({
+        connectionString: process.env.HEROKU_CONNECTION_STRING
+      });
+
+      return;
+    }
+
     let dbName: string;
+
     if (process.env.NODE_ENV === "test") {
       dbName = "chitter_test";
     } else {
