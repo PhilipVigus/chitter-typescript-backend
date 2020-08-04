@@ -84,12 +84,12 @@ class Comment {
     timeCreated: Date;
   } {
     return {
-      id: this._id,
-      userId: this._userId,
-      peepId: this._peepId,
-      username: this._username,
-      text: this._text,
-      timeCreated: this._timeCreated
+      id: this.id,
+      userId: this.userId,
+      peepId: this.peepId,
+      username: this.username,
+      text: this.text,
+      timeCreated: this.timeCreated
     };
   }
 

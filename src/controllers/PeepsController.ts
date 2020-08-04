@@ -3,7 +3,6 @@ import Peep from "../model/Peep";
 
 class PeepsController {
   public static async createPeep(req: Request, res: Response): Promise<void> {
-    console.log("in create peep");
     await Peep.create(req.body.userId, req.body.text);
     res.status(200).send();
   }
