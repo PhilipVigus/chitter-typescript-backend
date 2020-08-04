@@ -8,6 +8,7 @@
     "clean": "rimraf dist/*",
     "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
     "dev:start": "npm-run-all build start",
+    "postinstall": "npm build",
     "start": "node .",
     "test": "jest --clearCache && jest -i --watch",
     "tsc": "tsc",
@@ -16,6 +17,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PhilipVigus/chitter-typescript-backend.git"
+  },
+  "engines": {
+    "node": "14.5.0"
   },
   "keywords": [],
   "author": "",
