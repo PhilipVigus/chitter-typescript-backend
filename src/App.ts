@@ -15,7 +15,7 @@ import likesRoute from "./routes/likesRoute";
 
 dotenv.config();
 
-const port = process.env.SERVER_PORT;
+const port = process.env.PORT || process.env.SERVER_PORT;
 
 class App {
   private _app: Application;
