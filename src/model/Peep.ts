@@ -57,13 +57,17 @@ class Peep {
   }
 
   public static async create(userId: number, text: string): Promise<Peep> {
+    console.log("in Peep model");
+    console.log(text);
+    console.log(userId);
     const result = await PGConnection.query(
       `INSERT INTO Peeps (user_id, text) VALUES (${userId}, $$${text}$$) RETURNING id, user_id, text, created_at;`
     );
     const newPeepAttributes = result.rows[0];
+    console.log(result.rows[0]);
     const username = (await User.findById(newPeepAttributes.user_id))
       ?.username as string;
-
+    console.log(username);
     const peep = new Peep(
       newPeepAttributes.id,
       newPeepAttributes.user_id,
@@ -74,6 +78,7 @@ class Peep {
 
     peep.comments = await Comment.allFromPeep(peep.id);
     peep.likes = await Like.allFromPeep(peep.id);
+    console.log(peep);
 
     return peep;
   }
