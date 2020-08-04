@@ -26,7 +26,7 @@ class PGConnection {
     PGConnection.pool = new Pool({
       host: "localhost",
       port: 5432,
-      user: "phil",
+      user: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: dbName
     });

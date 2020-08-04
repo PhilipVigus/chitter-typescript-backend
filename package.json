@@ -13,7 +13,7 @@
     "test": "jest --clearCache && jest -i --watch",
     "testWithCoverage": "jest --clearCache && jest -i --coverage --watchAll=false",
     "tsc": "tsc",
-    "lint": "eslint ./src/**/* --ext .ts"
+    "lint": "eslint ./src/**/* --ext .ts --no-ignore"
   },
   "repository": {
     "type": "git",
